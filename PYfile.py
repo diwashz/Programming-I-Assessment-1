@@ -81,3 +81,24 @@ def requisition_approval(requisition):
 
 req = add_requisition()
 requisition_approval(req)
+
+
+# Task 3
+
+def display_requisitions(all_requisitions):
+    """Print basic info, total and approval details."""
+    print("\nPrinting requisitions:")
+    if len(all_requisitions) == 0: 
+        print("No requisitions.")
+        return 
+
+    for req in all_requisitions: 
+        print("Date:", req["date"])
+        print("Requisition ID: ", req["requisition_id"])
+        print("Staff ID:", req["staff_id"])
+        print("Staff Name:", req["staff_name"])
+        print(f"Total ${req["total"]:g}")
+        print("Status:", req["status"])
+        print("\nApproval Reference Number:", req["approval_ref"])
+        print()
+        
