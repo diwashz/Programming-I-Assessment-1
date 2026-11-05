@@ -82,8 +82,6 @@ def requisition_approval(requisition):
     print("Approval Reference Number:", requisition["approval_ref"])
     return requisition
 
-req = add_requisition()
-requisition_approval(req)
 
 
 # Task 3
@@ -190,3 +188,8 @@ def run_gui():
     tk.Button(window, text="Check Approval", command=check_approval).pack()
 
     window.mainloop()
+
+
+
+if __name__ == '__main__':
+    main()
