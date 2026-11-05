@@ -1,5 +1,8 @@
 # Name: Diwash
 # hi
+
+import tkinter as tk 
+from tkinter import messagebox
 requisition_counter = 0
 
 
@@ -101,4 +104,89 @@ def display_requisitions(all_requisitions):
         print("Status:", req["status"])
         print("\nApproval Reference Number:", req["approval_ref"])
         print()
-        
+
+
+# Task 4
+
+def run_gui():
+    window = tk.Tk()
+    window.title("Purchase Requisition System")
+
+    gui_items = []
+    entries = {}
+    for name in ["Date", "Staff ID", "Staff Name", "Item Name", "Item Price"]:
+        tk.Label(window, text=name + ":").pack()
+        entries[name] = tk.Entry(window)
+        entries[name].pack()
+
+    output = tk.Label(window, text="")
+    output.pack(pady=10)
+
+    def get_total():
+        total = 0
+        for item in gui_items:
+            total += item["price"]
+        return total
+
+    def add_item():
+        item_name = entries["Item Name"].get().strip()
+        try:
+            price = float(entries["Item Price"].get())
+            if price < 0:
+                raise ValueError
+        except ValueError:
+            output.config(text="Please enter a valid price")
+            return
+        if item_name == "":
+            output.config(text="Please enter an item name")
+            return
+
+        gui_items.append({"name": item_name, "price": price})
+        output.config(text=f"Items added: {len(gui_items)}")
+        entries["Item Name"].delete(0, tk.END)
+        entries["Item Price"].delete(0, tk.END)
+
+    def calculate_total():
+        if len(gui_items) == 0:
+            output.config(text="Add at least one item first")
+            return
+        output.config(text=f"Total: ${get_total():g}")
+
+    def check_approval():
+        global requisition_counter
+
+        date = entries["Date"].get().strip()
+        staff_id = entries["Staff ID"].get().strip()
+        staff_name = entries["Staff Name"].get().strip()
+        if date == "" or staff_id == "" or staff_name == "":
+            output.config(text="Please fill in Date, Staff ID and Staff Name")
+            return
+        if len(gui_items) == 0:
+            output.config(text="Add at least one item first")
+            return
+
+        requisition_counter += 1
+        requisition = {
+            "date": date,
+            "staff_id": staff_id,
+            "staff_name": staff_name,
+            "requisition_id": 10000 + requisition_counter,
+            "items": list(gui_items),
+            "total": get_total(),
+            "status": "Pending",
+            "approval_ref": "N/A",
+        }
+        requisition_approval(requisition)
+
+        output.config(
+            text=f"Total: ${requisition['total']:g}\n"
+                 f"Status: {requisition['status']}\n"
+                 f"Approval Reference Number: {requisition['approval_ref']}"
+        )
+        gui_items.clear()   
+
+    tk.Button(window, text="Add Item", command=add_item).pack()
+    tk.Button(window, text="Calculate Total", command=calculate_total).pack()
+    tk.Button(window, text="Check Approval", command=check_approval).pack()
+
+    window.mainloop()
