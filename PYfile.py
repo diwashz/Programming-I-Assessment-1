@@ -181,7 +181,7 @@ def run_gui():
                  f"Status: {requisition['status']}\n"
                  f"Approval Reference Number: {requisition['approval_ref']}"
         )
-        gui_items.clear()   
+        gui_items.clear()
 
     tk.Button(window, text="Add Item", command=add_item).pack()
     tk.Button(window, text="Calculate Total", command=calculate_total).pack()
@@ -189,7 +189,28 @@ def run_gui():
 
     window.mainloop()
 
+def main():
+    all_requisitions = []
+
+    choice = input("Type 1 for console version or 2 for GUI: ").strip()
+
+    if choice == "1":
+        while True:
+            req = add_requisition()
+            requisition_approval(req)
+            all_requisitions.append(req)
+
+            another = input("Add another requisition? (yes/no): ").strip().lower()
+            while another not in ("yes", "no"):
+                another = input("Please answer 'yes' or 'no': ").strip().lower()
+            if another == "no":
+                break
+
+        display_requisitions(all_requisitions)
+    elif choice == "2":
+        run_gui()
+    else:
+        print("Invalid choice")
 
 
-if __name__ == '__main__':
-    main()
+main()
