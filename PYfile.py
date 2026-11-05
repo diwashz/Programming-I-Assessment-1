@@ -2,6 +2,9 @@
 # hi
 requisition_counter = 0
 
+
+# Task 1
+
 def add_requisition():
     """Collect staff info and items, generate ID and return everything."""
     global requisition_counter
@@ -55,4 +58,26 @@ def add_requisition():
 
     return requisition
 
-print(add_requisition())  
+
+
+
+# Task 2
+
+def requisition_approval(requisition):
+    """Approve automatically if the total is less than $500 and keep pending if not"""
+    requisition["status"] = "Pending"
+    requisition["approval_ref"] = "N/A"
+
+    if requisition["total"] < 500:
+        requisition["status"] = "Approved"
+        requisition["approval_ref"] = (
+            requisition["staff_id"] + str(requisition["requisition_id"])[-3:]
+        )
+
+    print(f"Total: ${requisition['total']:g}")
+    print(f"Status: {requisition['status']}")
+    print("Approval Reference Number:", requisition["approval_ref"])
+    return requisition
+
+req = add_requisition()
+requisition_approval(req)
