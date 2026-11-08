@@ -1,4 +1,4 @@
-# Name: Diwash
+# name: diwash
 # hi
 
 import tkinter as tk 
@@ -6,7 +6,7 @@ from tkinter import messagebox
 requisition_counter = 0
 
 
-# Task 1
+# task  1
 
 def add_requisition():
     """Collect staff info and items, generate ID and return everything."""
@@ -15,13 +15,13 @@ def add_requisition():
     print("Enter your Info:")
     date = input("Date:").strip()
     staff_id = input("Staff ID:").strip()
-    staff_name = input("Staff Name:").strip()
+    staff_name = input("Staff Name:").strip() 
 
-    requisition_counter += 1
+    requisition_counter  + = 1
     requisition_id = 10000 + requisition_counter
     print("Requisition ID:", requisition_id)
 
-    items = []
+    items   =  []
     print("\nAdd Items: ")
     while True:
         item_name = input("Item Name:").strip()
@@ -45,10 +45,10 @@ def add_requisition():
 
     total = 0
     for item in items:
-        total += item["price"]
+        total +=  item["price"]
     print(f"Total: ${total:g}")
 
-    requisition = {
+    requisition = { 
         "date": date,
         "staff_id": staff_id,
         "staff_name": staff_name,
@@ -64,17 +64,17 @@ def add_requisition():
 
 
 
-# Task 2
+# task 2
 
 def requisition_approval(requisition):
     """Approve automatically if the total is less than $500 and keep pending if not"""
     requisition["status"] = "Pending"
-    requisition["approval_ref"] = "N/A"
+    requisition["approval_ref"] = "N  / A"
 
     if requisition["total"] < 500:
-        requisition["status"] = "Approved"
+        requisition["status"] = "Approved"   
         requisition["approval_ref"] = (
-            requisition["staff_id"] + str(requisition["requisition_id"])[-3:]
+            requisition["staff_id"] + str(requisition["requisition_id"])[-3:] 
         )
 
     print(f"Total: ${requisition['total']:g}")
@@ -84,7 +84,7 @@ def requisition_approval(requisition):
 
 
 
-# Task 3
+# task 3
 
 def display_requisitions(all_requisitions):
     """Print basic info, total and approval details."""
@@ -104,14 +104,14 @@ def display_requisitions(all_requisitions):
         print()
 
 
-# Task 4
+# task 4
 
 def run_gui():
-    window = tk.Tk()
+    window  = tk.Tk()
     window.title("Purchase Requisition System")
 
     gui_items = []
-    entries = {}
+    entries  =   {}
     for name in ["Date", "Staff ID", "Staff Name", "Item Name", "Item Price"]:
         tk.Label(window, text=name + ":").pack()
         entries[name] = tk.Entry(window)
@@ -135,7 +135,7 @@ def run_gui():
         except ValueError:
             output.config(text="Please enter a valid price")
             return
-        if item_name == "":
+        if item_name   ==   "":
             output.config(text="Please enter an item name")
             return
 
@@ -145,7 +145,7 @@ def run_gui():
         entries["Item Price"].delete(0, tk.END)
 
     def calculate_total():
-        if len(gui_items) == 0:
+        if len(gui_items)  == 0:
             output.config(text="Add at least one item first")
             return
         output.config(text=f"Total: ${get_total():g}")
@@ -155,7 +155,7 @@ def run_gui():
 
         date = entries["Date"].get().strip()
         staff_id = entries["Staff ID"].get().strip()
-        staff_name = entries["Staff Name"].get().strip()
+        staff_name = entries["Staff Name"].get().strip() 
         if date == "" or staff_id == "" or staff_name == "":
             output.config(text="Please fill in Date, Staff ID and Staff Name")
             return
@@ -164,7 +164,7 @@ def run_gui():
             return
 
         requisition_counter += 1
-        requisition = {
+        requisition   =   {
             "date": date,
             "staff_id": staff_id,
             "staff_name": staff_name,
@@ -184,13 +184,13 @@ def run_gui():
         gui_items.clear()
 
     tk.Button(window, text="Add Item", command=add_item).pack()
-    tk.Button(window, text="Calculate Total", command=calculate_total).pack()
+    tk.Button(window, text="Calculate Total", command   = calculate_total).pack()
     tk.Button(window, text="Check Approval", command=check_approval).pack()
 
     window.mainloop()
 
 def main():
-    all_requisitions = []
+    all_requisitions  = []
 
     choice = input("Type 1 for console version or 2 for GUI: ").strip()
 
@@ -200,7 +200,7 @@ def main():
             requisition_approval(req)
             all_requisitions.append(req)
 
-            another = input("Add another requisition? (yes/no): ").strip().lower()
+            another = input("Add another requisition? (yes/no): ").strip().lower() 
             while another not in ("yes", "no"):
                 another = input("Please answer 'yes' or 'no': ").strip().lower()
             if another == "no":
