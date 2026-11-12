@@ -10,38 +10,38 @@ requisition_counter = 0
 def add_requisition():
     global requisition_counter
 
-    print("Enter your information:")
+    print("Enter your info -")
 
-    date = input("Date: ").strip()
+    date = input("Date - ").strip()
     while date == "":
-        date = input("Date cannot be blank. Date: ").strip()
+        date = input("Date can't be blank, enter again ").strip()
 
-    staff_id = input("Staff ID: ").strip()
+    staff_id = input("Staff ID - ").strip()
     while staff_id == "":
-        staff_id = input("Staff ID cannot be blank. Staff ID: ").strip()
+        staff_id = input("Staff ID can't be blank, enter again ").strip()
 
-    staff_name = input("Staff Name: ").strip()
+    staff_name = input("Staff Name - ").strip()
     while staff_name == "":
-        staff_name = input("Staff Name cannot be blank. Staff Name: ").strip()
+        staff_name = input("Staff Name can't be blank, enter again ").strip()
 
     requisition_counter = requisition_counter + 1
     requisition_id = 10000 + requisition_counter
-    print("Requisition ID:", requisition_id)
+    print("Requisition ID -", requisition_id)
 
-    print("\nAdd items:")
+    print("\nAdd your Items -")
     items = []
     total = 0
     decision = "yes"
 
     while decision == "yes":
-        item_name = input("Item Name: ").strip()
+        item_name = input("Item Name - ").strip()
         while item_name == "":
-            item_name = input("Item Name cannot be blank. Item Name: ").strip()
+            item_name = input("Item Name can't be blank, enter again ").strip()
 
         item_price = 0
         while item_price <= 0:
             try:
-                item_price = float(input("Item Price ($): "))
+                item_price = float(input("Item Price (in $) - "))
                 if item_price <= 0:
                     print("Price must be more than zero.")
             except ValueError:
@@ -51,11 +51,11 @@ def add_requisition():
         items.append([item_name, item_price])
         total = total + item_price
 
-        decision = input("Add another item (yes/no): ").strip().lower()
+        decision = input("Add Another Item? (yes or no) ").strip().lower()
         while decision != "yes" and decision != "no":
-            decision = input("Please type yes or no: ").strip().lower()
+            decision = input("Please type either yes or no ").strip().lower()
 
-    print("Total: $" + str(total))
+    print("Total - $" + str(total))
 
     requisition = {
         "date": date,
@@ -65,7 +65,7 @@ def add_requisition():
         "items": items,
         "total": total,
         "status": "Pending",
-        "approval_ref": "N/A",
+        "approval_ref": "Not Available",
     }
     return requisition
 
@@ -74,7 +74,7 @@ def add_requisition():
 
 def requisition_approval(requisition):
     status = "Pending"
-    approval_ref = "N/A"
+    approval_ref = "Not Available"
 
     if requisition["total"] < 500:
         status = "Approved"
@@ -83,144 +83,151 @@ def requisition_approval(requisition):
     requisition["status"] = status
     requisition["approval_ref"] = approval_ref
 
-    print("Total: $" + str(requisition["total"]))
-    print("Status:", status)
-    print("Approval Reference Number:", approval_ref)
+    print("Total - $" + str(requisition["total"]))
+    print("Status -", status)
+    print("Approval Number -", approval_ref)
     return requisition
 
 
 # Task 3
 
 def display_requisitions(all_requisitions):
-    print("\nPrinting requisitions:")
+    print("\nRequisitions -")
 
     if all_requisitions == []:
-        print("No requisitions.")
+        print("No Requisitions -")
         return
 
     for requisition in all_requisitions:
-        print("Date:", requisition["date"])
-        print("Requisition ID:", requisition["requisition_id"])
-        print("Staff ID:", requisition["staff_id"])
-        print("Staff Name:", requisition["staff_name"])
-        print("Total: $" + str(requisition["total"]))
-        print("Status:", requisition["status"])
-        print("Approval Reference Number:", requisition["approval_ref"])
+        print("Date -", requisition["date"])
+        print("Requisition ID -", requisition["requisition_id"])
+        print("Staff ID -", requisition["staff_id"])
+        print("Staff Name -", requisition["staff_name"])
+        print("Total - $" + str(requisition["total"]))
+        print("Status -", requisition["status"])
+        print("Approval Number -", requisition["approval_ref"])
         print()
 
 
 
-all_requisitions = []
-another = "yes"
+choice = input("Type 1 for Console or 2 for GUI - ").strip()
+while choice != "1" and choice != "2":
+    choice = input("Please type either 1 or 2 ").strip()
 
-while another == "yes":
-    requisition = add_requisition()
-    requisition_approval(requisition)
-    all_requisitions.append(requisition)
+\
+if choice == "1":
+    all_requisitions = []
+    another = "yes"
 
-    another = input("Add another requisition? (yes/no): ").strip().lower()
-    while another != "yes" and another != "no":
-        another = input("Please type yes or no: ").strip().lower()
+    while another == "yes":
+        requisition = add_requisition()
+        requisition_approval(requisition)
+        all_requisitions.append(requisition)
 
-display_requisitions(all_requisitions)
+        another = input("Add Another Requisition? (yes or no) ").strip().lower()
+        while another != "yes" and another != "no":
+            another = input("Please type either yes or no ").strip().lower()
+
+    display_requisitions(all_requisitions)
 
 
 # Task 4
 
 import tkinter as tk
 
-gui_items = []
 
-window = tk.Tk()
-window.title("Purchase Requisition System")
-window.geometry("400x560")
+def gui():
+    gui_items = []
 
-entries = {}
-for name in ["Date", "Staff ID", "Staff Name", "Item Name", "Item Price"]:
-    tk.Label(window, text=name + ":").pack()
-    entries[name] = tk.Entry(window)
-    entries[name].pack()
+    window = tk.Tk()
+    window.title("Purchase Requisition System")
+    window.geometry("400x560")
 
-items_box = tk.Listbox(window, height=5, width=35)
-items_box.pack(pady=5)
+    entries = {}
+    for name in ["Date", "Staff ID", "Staff Name", "Item Name", "Item Price"]:
+        tk.Label(window, text=name + " -").pack()
+        entries[name] = tk.Entry(window)
+        entries[name].pack()
 
-output = tk.Label(window, text="")
-output.pack(pady=10)
+    items_box = tk.Listbox(window, height=5, width=35)
+    items_box.pack(pady=5)
+
+    output = tk.Label(window, text="")
+    output.pack(pady=10)
+
+    def get_total():
+        total = 0
+        for item in gui_items:
+            total = total + item["price"]
+        return total
+
+    def add_item():
+        item_name = entries["Item Name"].get().strip()
+        if item_name == "":
+            output.config(text="Item Name can't be blank, enter again")
+            return
+
+        try:
+            price = float(entries["Item Price"].get())
+            if price <= 0:
+                raise ValueError
+        except ValueError:
+            output.config(text="Price must be a number more than zero")
+            return
+
+        gui_items.append({"name": item_name, "price": price})
+        items_box.insert(tk.END, item_name + " - $" + str(price))
+        output.config(text="Item Added - " + item_name)
+        entries["Item Name"].delete(0, tk.END)
+        entries["Item Price"].delete(0, tk.END)
+
+    def calculate_total():
+        if gui_items == []:
+            output.config(text="Add at least one Item first")
+            return
+        output.config(text=f"Total - ${get_total():.2f}")
+
+    def check_approval():
+        global requisition_counter
+
+        date = entries["Date"].get().strip()
+        staff_id = entries["Staff ID"].get().strip()
+        staff_name = entries["Staff Name"].get().strip()
+
+        if date == "" or staff_id == "" or staff_name == "":
+            output.config(text="Please Fill in All Details")
+            return
+        if gui_items == []:
+            output.config(text="Add at least one Item first")
+            return
+
+        requisition_counter = requisition_counter + 1
+        requisition = {
+            "date": date,
+            "staff_id": staff_id,
+            "staff_name": staff_name,
+            "requisition_id": 10000 + requisition_counter,
+            "items": list(gui_items),
+            "total": get_total(),
+            "status": "Pending",
+            "approval_ref": "Not Available",
+        }
+        requisition_approval(requisition)
+
+        output.config(
+            text=f"Total - ${requisition['total']:.2f}\n"
+                 f"Status - {requisition['status']}\n"
+                 f"Approval Number - {requisition['approval_ref']}"
+        )
+        gui_items.clear()
+        items_box.delete(0, tk.END)
+
+    tk.Button(window, text="Add Item", command=add_item).pack()
+    tk.Button(window, text="Calculate Total", command=calculate_total).pack()
+    tk.Button(window, text="Check Approval", command=check_approval).pack()
+
+    window.mainloop()
 
 
-def get_total():
-    total = 0
-    for item in gui_items:
-        total = total + item["price"]
-    return total
-
-
-def add_item():
-    item_name = entries["Item Name"].get().strip()
-    if item_name == "":
-        output.config(text="Please enter an item name")
-        return
-
-    try:
-        price = float(entries["Item Price"].get())
-        if price <= 0:
-            raise ValueError
-    except ValueError:
-        output.config(text="Please enter a valid price above zero")
-        return
-
-    gui_items.append({"name": item_name, "price": price})
-    items_box.insert(tk.END, item_name + ": $" + str(price))
-    output.config(text="Item added: " + item_name)
-    entries["Item Name"].delete(0, tk.END)
-    entries["Item Price"].delete(0, tk.END)
-
-
-def calculate_total():
-    if gui_items == []:
-        output.config(text="Add at least one item first")
-        return
-    output.config(text=f"Total: ${get_total():.2f}")
-
-
-def check_approval():
-    global requisition_counter
-
-    date = entries["Date"].get().strip()
-    staff_id = entries["Staff ID"].get().strip()
-    staff_name = entries["Staff Name"].get().strip()
-
-    if date == "" or staff_id == "" or staff_name == "":
-        output.config(text="Please fill in Date, Staff ID and Staff Name")
-        return
-    if gui_items == []:
-        output.config(text="Add at least one item first")
-        return
-
-    requisition_counter = requisition_counter + 1
-    requisition = {
-        "date": date,
-        "staff_id": staff_id,
-        "staff_name": staff_name,
-        "requisition_id": 10000 + requisition_counter,
-        "items": list(gui_items),
-        "total": get_total(),
-        "status": "Pending",
-        "approval_ref": "N/A",
-    }
-    requisition_approval(requisition)
-
-    output.config(
-        text=f"Total: ${requisition['total']:.2f}\n"
-             f"Status: {requisition['status']}\n"
-             f"Approval Reference Number: {requisition['approval_ref']}"
-    )
-    gui_items.clear()
-    items_box.delete(0, tk.END)
-
-
-tk.Button(window, text="Add Item", command=add_item).pack()
-tk.Button(window, text="Calculate Total", command=calculate_total).pack()
-tk.Button(window, text="Check Approval", command=check_approval).pack()
-
-window.mainloop()
+if choice == "2":
+    gui()
